@@ -65,7 +65,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser.y:133
+//line parser.y:138
 
 //line yacctab:1
 var yyExca = [...]int{
@@ -88,8 +88,8 @@ var yyAct = [...]int{
 	6, 13, 5, 18, 14, 20, 18, 37, 32, 7,
 	38, 33, 4, 48, 35, 16, 51, 47, 29, 34,
 	26, 27, 28, 52, 42, 22, 23, 50, 12, 42,
-	46, 21, 43, 10, 44, 9, 10, 25, 49, 41,
-	30, 24, 17, 15, 3, 2, 1,
+	46, 21, 43, 10, 44, 9, 10, 25, 49, 30,
+	3, 2, 1, 41, 24, 17, 15,
 }
 var yyPact = [...]int{
 
@@ -102,14 +102,14 @@ var yyPact = [...]int{
 }
 var yyPgo = [...]int{
 
-	0, 56, 55, 54, 10, 2, 0, 53, 25, 52,
-	51, 50, 1, 49,
+	0, 25, 56, 0, 55, 54, 53, 52, 51, 50,
+	10, 2, 49, 1,
 }
 var yyR1 = [...]int{
 
-	0, 1, 2, 3, 3, 4, 4, 5, 5, 7,
-	7, 8, 9, 10, 11, 11, 11, 11, 11, 11,
-	12, 12, 12, 6, 6, 13, 13,
+	0, 7, 8, 9, 9, 10, 10, 11, 11, 2,
+	2, 1, 4, 5, 12, 12, 12, 12, 12, 12,
+	13, 13, 13, 3, 3, 6, 6,
 }
 var yyR2 = [...]int{
 
@@ -119,11 +119,11 @@ var yyR2 = [...]int{
 }
 var yyChk = [...]int{
 
-	-1000, -1, -2, -3, 16, 17, -4, 18, -6, 7,
-	8, -5, 10, 19, 14, -7, -8, -9, -6, 20,
-	-6, -8, 11, 12, -10, 7, -4, 11, 12, 13,
-	-11, 7, 19, 22, -5, 13, 7, 19, 22, 21,
-	-12, -13, -6, 7, 9, 21, -12, 14, 10, -6,
+	-1000, -7, -8, -9, 16, 17, -10, 18, -3, 7,
+	8, -11, 10, 19, 14, -2, -1, -4, -3, 20,
+	-3, -1, 11, 12, -5, 7, -10, 11, 12, 13,
+	-12, 7, 19, 22, -11, 13, 7, 19, 22, 21,
+	-13, -6, -3, 7, 9, 21, -13, 14, 10, -3,
 	11, 10, 11,
 }
 var yyDef = [...]int{
@@ -488,27 +488,27 @@ yydefault:
 
 	case 5:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:44
+//line parser.y:49
 		{
 			yylex.(*lexer).ast.Table = yyDollar[1].val
 		}
 	case 6:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:48
+//line parser.y:53
 		{
 			yylex.(*lexer).ast.Schema = yyDollar[1].val
 			yylex.(*lexer).ast.Table = yyDollar[3].val
 		}
 	case 7:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line parser.y:56
+//line parser.y:61
 		{
 			ast := yylex.(*lexer).ast
 			ast.Columns = append(yyDollar[2].columns, yyDollar[3].column)
 		}
 	case 8:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line parser.y:61
+//line parser.y:66
 		{
 			ast := yylex.(*lexer).ast
 			ast.Columns = []*TableColumn{
@@ -517,7 +517,7 @@ yydefault:
 		}
 	case 9:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:70
+//line parser.y:75
 		{
 			yyVAL.columns = []*TableColumn{
 				yyDollar[1].column,
@@ -525,13 +525,13 @@ yydefault:
 		}
 	case 10:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:76
+//line parser.y:81
 		{
 			yyVAL.columns = append(yyDollar[1].columns, yyDollar[2].column)
 		}
 	case 11:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:82
+//line parser.y:87
 		{
 			yyVAL.column = &TableColumn{
 				Name: yyDollar[1].val,
@@ -540,37 +540,37 @@ yydefault:
 		}
 	case 12:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:91
+//line parser.y:96
 		{
 			yyVAL.val = yyDollar[1].val
 		}
 	case 13:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:97
+//line parser.y:102
 		{
 			yyVAL.val = yyDollar[1].val
 		}
 	case 23:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:117
+//line parser.y:122
 		{
 			yyVAL.val = yyDollar[1].val
 		}
 	case 24:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:121
+//line parser.y:126
 		{
 			yyVAL.val = yyDollar[1].val
 		}
 	case 25:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:126
+//line parser.y:131
 		{
 			yyVAL.val = yyDollar[1].val
 		}
 	case 26:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:130
+//line parser.y:135
 		{
 			yyVAL.val = yyDollar[1].val
 		}

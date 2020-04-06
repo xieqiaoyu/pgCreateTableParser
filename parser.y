@@ -8,7 +8,7 @@ package tableParser
 	columns []*TableColumn
 }
 
-%token tokenError
+%token <val> tokenError
        tokenEOF
        tokenUnknown
        tokenString
@@ -30,6 +30,11 @@ package tableParser
        tokenNULL
        tokenDEFAULT
 
+%type <column> ddl_table_column
+%type <columns> ddl_table_columns
+
+%type <val> ddl_symbol ddl_column_name ddl_data_type ddl_value
+
 %%
 ddl: ddl_create
 
@@ -42,12 +47,12 @@ ddl_create_table
 ddl_tableName
 	: ddl_symbol
 	{
-		yylex.(*lexer).ast.Table=$1.val
+		yylex.(*lexer).ast.Table=$1
 	}
 	| ddl_symbol tokenDot ddl_symbol
 	{
-		yylex.(*lexer).ast.Schema=$1.val
-		yylex.(*lexer).ast.Table=$3.val
+		yylex.(*lexer).ast.Schema=$1
+		yylex.(*lexer).ast.Table=$3
 	}
 	;
 
@@ -55,47 +60,47 @@ ddl_create_table_body
 	: tokenLeftParen ddl_table_columns  ddl_table_column tokenRightParen tokenSemicolon
 	{
 		ast := yylex.(*lexer).ast
-		ast.Columns = append($2.columns,$3.column)
+		ast.Columns = append($2,$3)
 	}
 	 | tokenLeftParen ddl_table_column tokenRightParen tokenSemicolon
 	 {
 		ast := yylex.(*lexer).ast
 		ast.Columns  = []*TableColumn{
-			$2.column,
+			$2,
 		}
 	 }
 
 ddl_table_columns
 	: ddl_table_column tokenComma
 	{
-		$$.columns = []*TableColumn{
-			$1.column,
+		$$ = []*TableColumn{
+			$1,
 		}
 	}
 	| ddl_table_columns ddl_table_column tokenComma
 	{
-		$$.columns = append($1.columns,$2.column)
+		$$ = append($1,$2)
 	}
 
 ddl_table_column
 	: ddl_column_name ddl_data_type ddl_column_constraint
 	{
-	 $$.column = &TableColumn{
-		Name: $1.val,
-		Type: $2.val,
+	 $$ = &TableColumn{
+		Name: $1,
+		Type: $2,
 	 }
 	}
 
 ddl_column_name
 	: ddl_symbol
 	{
-		$$.val = $1.val
+		$$ = $1
 	}
 	;
 ddl_data_type
 	: tokenString
 	{
-		$$.val = $1.val
+		$$ = $1
 	}
 	;
 
@@ -115,19 +120,19 @@ ddl_default_expr
 ddl_symbol
 	: tokenString
 	{
-		$$.val = $1.val
+		$$ = $1
 	}
 	| tokenPgSymbol
 	{
-		$$.val = $1.val
+		$$ = $1
 	}
 ddl_value
 	: tokenString
 	{
-		$$.val = $1.val
+		$$ = $1
 	}
 	| tokenPgValue
 	{
-		$$.val = $1.val
+		$$ = $1
 	}
 %%
