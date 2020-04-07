@@ -34,6 +34,7 @@ const tokenNOT = 57361
 const tokenEXISTS = 57362
 const tokenNULL = 57363
 const tokenDEFAULT = 57364
+const tokenUNIQUE = 57365
 
 var yyToknames = [...]string{
 	"$end",
@@ -58,6 +59,7 @@ var yyToknames = [...]string{
 	"tokenEXISTS",
 	"tokenNULL",
 	"tokenDEFAULT",
+	"tokenUNIQUE",
 }
 var yyStatenames = [...]string{}
 
@@ -65,75 +67,82 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser.y:118
+//line parser.y:141
 
 //line yacctab:1
 var yyExca = [...]int{
 	-1, 1,
 	1, -1,
 	-2, 0,
-	-1, 43,
-	10, 23,
-	14, 23,
-	-2, 25,
+	-1, 56,
+	10, 32,
+	14, 32,
+	-2, 34,
 }
 
 const yyPrivate = 57344
 
-const yyLast = 57
+const yyLast = 76
 
 var yyAct = [...]int{
 
-	8, 40, 11, 45, 39, 36, 31, 19, 9, 10,
-	6, 13, 5, 18, 14, 20, 18, 37, 32, 7,
-	38, 33, 4, 48, 35, 16, 51, 47, 29, 34,
-	26, 27, 28, 52, 42, 22, 23, 50, 12, 42,
-	46, 21, 43, 10, 44, 9, 10, 25, 49, 30,
-	3, 2, 1, 41, 24, 17, 15,
+	20, 18, 53, 11, 61, 49, 8, 6, 9, 10,
+	52, 39, 21, 13, 5, 22, 4, 50, 17, 29,
+	51, 48, 8, 40, 19, 42, 41, 38, 16, 31,
+	9, 10, 44, 14, 24, 45, 64, 47, 59, 60,
+	63, 7, 55, 58, 23, 46, 36, 34, 35, 32,
+	33, 27, 55, 69, 62, 25, 26, 67, 56, 10,
+	57, 43, 65, 68, 66, 12, 30, 9, 10, 37,
+	3, 2, 1, 54, 28, 15,
 }
 var yyPact = [...]int{
 
-	6, -1000, -1000, -1000, -5, 1, 28, -8, 0, -1000,
-	-1000, -1000, 38, -13, 38, 38, 24, 40, -1000, 38,
-	-1000, 20, 15, -1000, -1, -1000, 28, 11, -1000, -1000,
-	-2, -1000, -17, 35, -1000, -1000, -1000, -18, 35, -1000,
-	-1000, -1000, 13, -1000, -1000, -1000, -1000, 38, 26, 16,
-	-1000, 22, -1000,
+	0, -1000, -1000, -1000, -3, 23, 55, -6, 19, -1000,
+	-1000, -1000, 1, -8, 60, 1, 44, 39, 60, 56,
+	-1000, 60, -1000, 38, 36, 33, -1000, -1000, 4, 11,
+	60, 55, 32, -1000, 24, -1000, -1000, -2, -1000, -1000,
+	-11, 51, 60, 27, -1000, -1000, -1000, -1000, -1000, -1000,
+	-17, 51, -1000, -1000, -1000, 26, -1000, -1000, -1000, -1000,
+	60, -1000, -1000, 60, 46, -1000, 53, -1000, 42, -1000,
 }
 var yyPgo = [...]int{
 
-	0, 25, 56, 0, 55, 54, 53, 52, 51, 50,
-	10, 2, 49, 1,
+	0, 28, 75, 0, 1, 74, 73, 72, 71, 70,
+	7, 3, 18, 69, 2, 61,
 }
 var yyR1 = [...]int{
 
-	0, 7, 8, 9, 9, 10, 10, 11, 11, 2,
-	2, 1, 4, 5, 12, 12, 12, 12, 12, 12,
-	13, 13, 13, 3, 3, 6, 6,
+	0, 7, 8, 9, 9, 10, 10, 11, 11, 11,
+	2, 2, 2, 2, 1, 4, 5, 5, 13, 13,
+	13, 13, 13, 13, 13, 13, 14, 14, 14, 12,
+	15, 15, 3, 3, 6, 6,
 }
 var yyR2 = [...]int{
 
-	0, 1, 1, 4, 7, 1, 3, 5, 4, 2,
-	3, 3, 1, 1, 1, 2, 2, 2, 3, 3,
-	1, 5, 3, 1, 1, 1, 1,
+	0, 1, 1, 4, 7, 1, 3, 5, 5, 4,
+	2, 2, 3, 3, 3, 1, 1, 3, 1, 1,
+	2, 2, 2, 2, 3, 3, 1, 5, 3, 4,
+	1, 3, 1, 1, 1, 1,
 }
 var yyChk = [...]int{
 
 	-1000, -7, -8, -9, 16, 17, -10, 18, -3, 7,
-	8, -11, 10, 19, 14, -2, -1, -4, -3, 20,
-	-3, -1, 11, 12, -5, 7, -10, 11, 12, 13,
-	-12, 7, 19, 22, -11, 13, 7, 19, 22, 21,
-	-13, -6, -3, 7, 9, 21, -13, 14, 10, -3,
-	11, 10, 11,
+	8, -11, 10, 19, 14, -2, -1, -12, -4, 23,
+	-3, 20, -3, -1, -12, 11, 12, 12, -5, -3,
+	10, -10, 11, 12, 11, 12, 13, -13, 23, 7,
+	19, 22, 14, -15, -4, -11, 13, 13, 23, 7,
+	19, 22, 21, -14, -6, -3, 7, 9, -3, 11,
+	12, 21, -14, 14, 10, -4, -3, 11, 10, 11,
 }
 var yyDef = [...]int{
 
-	0, -2, 1, 2, 0, 0, 0, 0, 5, 23,
-	24, 3, 0, 0, 0, 0, 0, 0, 12, 0,
-	6, 0, 0, 9, 0, 13, 0, 0, 10, 8,
-	11, 14, 0, 0, 4, 7, 17, 0, 0, 15,
-	16, 20, 0, -2, 26, 18, 19, 0, 0, 0,
-	22, 0, 21,
+	0, -2, 1, 2, 0, 0, 0, 0, 5, 32,
+	33, 3, 0, 0, 0, 0, 0, 0, 0, 0,
+	15, 0, 6, 0, 0, 0, 10, 11, 0, 16,
+	0, 0, 0, 12, 0, 13, 9, 14, 18, 19,
+	0, 0, 0, 0, 30, 4, 7, 8, 22, 23,
+	0, 0, 20, 21, 26, 0, -2, 35, 17, 29,
+	0, 24, 25, 0, 0, 31, 0, 28, 0, 27,
 }
 var yyTok1 = [...]int{
 
@@ -143,7 +152,7 @@ var yyTok2 = [...]int{
 
 	2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
 	12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-	22,
+	22, 23,
 }
 var yyTok3 = [...]int{
 	0,
@@ -488,55 +497,73 @@ yydefault:
 
 	case 5:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:49
+//line parser.y:50
 		{
 			yylex.(*lexer).ast.Table = yyDollar[1].val
 		}
 	case 6:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:53
+//line parser.y:54
 		{
 			yylex.(*lexer).ast.Schema = yyDollar[1].val
 			yylex.(*lexer).ast.Table = yyDollar[3].val
 		}
 	case 7:
 		yyDollar = yyS[yypt-5 : yypt+1]
-//line parser.y:61
+//line parser.y:62
 		{
 			ast := yylex.(*lexer).ast
 			ast.Columns = append(yyDollar[2].columns, yyDollar[3].column)
 		}
 	case 8:
+		yyDollar = yyS[yypt-5 : yypt+1]
+//line parser.y:67
+		{
+			ast := yylex.(*lexer).ast
+			ast.Columns = yyDollar[2].columns
+		}
+	case 9:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line parser.y:66
+//line parser.y:72
 		{
 			ast := yylex.(*lexer).ast
 			ast.Columns = []*TableColumn{
 				yyDollar[2].column,
 			}
 		}
-	case 9:
+	case 10:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:75
+//line parser.y:81
 		{
 			yyVAL.columns = []*TableColumn{
 				yyDollar[1].column,
 			}
 		}
-	case 10:
+	case 11:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:87
+		{
+		}
+	case 12:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:81
+//line parser.y:90
 		{
 			yyVAL.columns = append(yyDollar[1].columns, yyDollar[2].column)
 		}
-	case 11:
+	case 14:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:87
+//line parser.y:97
 		{
 			yyVAL.column = &TableColumn{
 				Name: yyDollar[1].val,
 				Type: yyDollar[2].val,
 			}
+		}
+	case 17:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:109
+		{
+			yyVAL.val = __yyfmt__.Sprintf("%s.%s", yyDollar[1].val, yyDollar[3].val)
 		}
 	}
 	goto yystack /* stack new state and value */

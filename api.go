@@ -1,5 +1,16 @@
 package tableParser
 
+type TableDefine struct {
+	Schema  string
+	Table   string
+	Columns []*TableColumn
+}
+
+type TableColumn struct {
+	Name string
+	Type string
+}
+
 func ParseTable(name, sql string) (*TableDefine, error) {
 	yyErrorVerbose = true
 	l := lex(name, sql)

@@ -29,6 +29,7 @@ package tableParser
        tokenEXISTS
        tokenNULL
        tokenDEFAULT
+       tokenUNIQUE
 
 %type <column> ddl_table_column
 %type <columns> ddl_table_columns
@@ -62,6 +63,11 @@ ddl_create_table_body
 		ast := yylex.(*lexer).ast
 		ast.Columns = append($2,$3)
 	}
+	| tokenLeftParen ddl_table_columns   ddl_table_constraint tokenRightParen tokenSemicolon
+	{
+		ast := yylex.(*lexer).ast
+		ast.Columns = $2
+	}
 	 | tokenLeftParen ddl_table_column tokenRightParen tokenSemicolon
 	 {
 		ast := yylex.(*lexer).ast
@@ -77,10 +83,14 @@ ddl_table_columns
 			$1,
 		}
 	}
+	| ddl_table_constraint tokenComma
+	{
+	}
 	| ddl_table_columns ddl_table_column tokenComma
 	{
 		$$ = append($1,$2)
 	}
+	| ddl_table_columns ddl_table_constraint tokenComma
 
 ddl_table_column
 	: ddl_column_name ddl_data_type ddl_column_constraint
@@ -94,12 +104,18 @@ ddl_table_column
 ddl_column_name
 	: ddl_symbol
 ddl_data_type
-	: tokenString
+	: ddl_symbol
+	| ddl_symbol tokenDot ddl_symbol
+	{
+		$$= __yyfmt__.Sprintf("%s.%s",$1,$3)
+	}
 
 ddl_column_constraint
-	: tokenString
+	: tokenUNIQUE
+	| tokenString
 	| tokenNOT tokenNULL
 	| tokenDEFAULT ddl_default_expr
+	| ddl_column_constraint tokenUNIQUE
 	| ddl_column_constraint tokenString
 	| ddl_column_constraint tokenNOT tokenNULL
 	| ddl_column_constraint tokenDEFAULT ddl_default_expr
@@ -108,6 +124,13 @@ ddl_default_expr
 	: ddl_value
 	| ddl_symbol tokenDot ddl_symbol tokenLeftParen tokenRightParen
 	| ddl_symbol tokenLeftParen tokenRightParen
+
+ddl_table_constraint
+	: tokenUNIQUE tokenLeftParen ddl_column_names tokenRightParen
+
+ddl_column_names
+	: ddl_column_name
+	| ddl_column_names tokenComma ddl_column_name
 
 ddl_symbol
 	: tokenString

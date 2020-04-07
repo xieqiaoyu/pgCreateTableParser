@@ -47,20 +47,10 @@ var keywords = map[string]tokenType{
 	"exists":  tokenEXISTS,
 	"null":    tokenNULL,
 	"default": tokenDEFAULT,
+	"unique":  tokenUNIQUE,
 }
 
 const eof = -1
-
-type TableDefine struct {
-	Schema  string
-	Table   string
-	Columns []*TableColumn
-}
-
-type TableColumn struct {
-	Name string
-	Type string
-}
 
 // stateFn represents the state of the scanner as a function that returns the next state.
 type stateFn func(*lexer) stateFn
