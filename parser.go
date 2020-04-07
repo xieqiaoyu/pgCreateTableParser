@@ -65,7 +65,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser.y:138
+//line parser.y:118
 
 //line yacctab:1
 var yyExca = [...]int{
@@ -537,42 +537,6 @@ yydefault:
 				Name: yyDollar[1].val,
 				Type: yyDollar[2].val,
 			}
-		}
-	case 12:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:96
-		{
-			yyVAL.val = yyDollar[1].val
-		}
-	case 13:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:102
-		{
-			yyVAL.val = yyDollar[1].val
-		}
-	case 23:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:122
-		{
-			yyVAL.val = yyDollar[1].val
-		}
-	case 24:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:126
-		{
-			yyVAL.val = yyDollar[1].val
-		}
-	case 25:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:131
-		{
-			yyVAL.val = yyDollar[1].val
-		}
-	case 26:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:135
-		{
-			yyVAL.val = yyDollar[1].val
 		}
 	}
 	goto yystack /* stack new state and value */

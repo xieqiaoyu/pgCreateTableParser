@@ -20,6 +20,7 @@ func TestParser(t *testing.T) {
 		t.Errorf("%s", err)
 		return
 	}
+	t.Logf("schema:%s table:%s", def.Schema, def.Table)
 	for index, col := range def.Columns {
 		t.Logf("%d|%s|%s\n", index, col.Name, col.Type)
 	}

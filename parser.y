@@ -93,16 +93,8 @@ ddl_table_column
 
 ddl_column_name
 	: ddl_symbol
-	{
-		$$ = $1
-	}
-	;
 ddl_data_type
 	: tokenString
-	{
-		$$ = $1
-	}
-	;
 
 ddl_column_constraint
 	: tokenString
@@ -119,20 +111,8 @@ ddl_default_expr
 
 ddl_symbol
 	: tokenString
-	{
-		$$ = $1
-	}
 	| tokenPgSymbol
-	{
-		$$ = $1
-	}
 ddl_value
 	: tokenString
-	{
-		$$ = $1
-	}
 	| tokenPgValue
-	{
-		$$ = $1
-	}
 %%
