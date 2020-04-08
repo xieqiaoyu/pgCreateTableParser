@@ -2,6 +2,7 @@ package tableParser
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -36,7 +37,7 @@ func defineEqual(d1, d2 *TableDefine) (bool, error) {
 func makeDefine(schema, table string, columns [][]string) *TableDefine {
 	cols := []*TableColumn{}
 	for _, column := range columns {
-		cols = append(cols, &TableColumn{column[0], column[1]})
+		cols = append(cols, &TableColumn{column[0], column[1], false}) // nullable false
 	}
 	return &TableDefine{
 		Schema:  schema,
@@ -45,11 +46,21 @@ func makeDefine(schema, table string, columns [][]string) *TableDefine {
 	}
 }
 func Define2String(def *TableDefine) string {
-	columns := ""
+	columns := "\n\t---------------+---------------"
 	for _, col := range def.Columns {
-		columns += fmt.Sprintf("[%s %s]", col.Name, col.Type)
+		columns += fmt.Sprintf("\n\t%-15s|%-15s", col.Name, col.Type)
 	}
-	return fmt.Sprintf("\"%s\".\"%s\" [%s]", def.Schema, def.Table, columns)
+	constraints := "\n\tConstraints:"
+	if len(def.Constraint.PrimaryKey) > 0 {
+		constraints += fmt.Sprintf("\n\t\tPK: %s", strings.Join(def.Constraint.PrimaryKey, ","))
+	}
+	if len(def.Constraint.Uniques) > 0 {
+		for _, unique := range def.Constraint.Uniques {
+			constraints += fmt.Sprintf("\n\t\tUnique: (%s)", strings.Join(unique, ","))
+		}
+	}
+
+	return fmt.Sprintf(" Table \"%s\".\"%s\" %s\n%s\n", def.Schema, def.Table, columns, constraints)
 }
 
 const (
@@ -104,6 +115,8 @@ func TestParser(t *testing.T) {
 		if !equal {
 			t.Errorf("parse %s err :%s, got\n\t%+v\nexpect\n\t%+v", test.name, err, Define2String(def), Define2String(test.assertDefine))
 			continue
+		} else {
+			t.Logf("Get Define:\n\t%s\n", Define2String(def))
 		}
 
 	}

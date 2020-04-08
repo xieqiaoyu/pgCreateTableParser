@@ -48,6 +48,8 @@ var keywords = map[string]tokenType{
 	"null":    tokenNULL,
 	"default": tokenDEFAULT,
 	"unique":  tokenUNIQUE,
+	"primary": tokenPRIMARY,
+	"key":     tokenKEY,
 }
 
 const eof = -1
@@ -226,7 +228,7 @@ func (l *lexer) Lex(lval *yySymType) int {
 	case tokenEOF:
 		return 0
 	}
-	lval.val = token.val
+	lval.stringVal = token.val
 	return int(token.typ)
 }
 

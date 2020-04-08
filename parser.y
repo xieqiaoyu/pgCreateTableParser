@@ -1,14 +1,19 @@
 %{
 package tableParser
+
 %}
 
 %union{
-	val string
-	column *TableColumn
-	columns []*TableColumn
+	stringVal string
+	stringsVal []string
+	boolVal bool
+	column columnObj
+	t_constraint  TableConstraint
+	t_header tableHeader
+	t_body tableBody
 }
 
-%token <val> tokenError
+%token <stringVal> tokenError
        tokenEOF
        tokenUnknown
        tokenString
@@ -30,11 +35,17 @@ package tableParser
        tokenNULL
        tokenDEFAULT
        tokenUNIQUE
+       tokenPRIMARY
+       tokenKEY
 
-%type <column> ddl_table_column
-%type <columns> ddl_table_columns
+%type <column> ddl_table_column ddl_column_constraint
+%type <t_header> ddl_create_table_header ddl_tableName
+%type <t_body> ddl_create_table_body
+%type <t_constraint>  ddl_table_constraint
 
-%type <val> ddl_symbol ddl_column_name ddl_data_type ddl_value
+%type <stringVal> ddl_symbol ddl_column_name ddl_data_type ddl_value
+%type <stringsVal> ddl_column_names
+%type <boolVal> ddl_column_primary_key
 
 %%
 ddl: ddl_create
@@ -42,63 +53,70 @@ ddl: ddl_create
 ddl_create: ddl_create_table
 
 ddl_create_table
-	: tokenCreate tokenTable ddl_tableName ddl_create_table_body
-	| tokenCreate tokenTable tokenIF tokenNOT tokenEXISTS ddl_tableName ddl_create_table_body
+	: ddl_create_table_header tokenLeftParen ddl_create_table_body tokenRightParen tokenSemicolon
+	{
+		columns := []*TableColumn{}
+		constraint := $3.constraint
+		for _,obj := range $3.columns {
+			columns = append(columns,obj.Column())
+			if obj.PrimaryKey {
+				constraint.PrimaryKey = append(constraint.PrimaryKey,obj.Name)
+			}
+			if obj.Unique {
+				constraint.Uniques = append(constraint.Uniques,[]string{obj.Name})
+			}
+		}
+		ast := yylex.(*lexer).ast
+		ast.Schema = $1.Schema
+		ast.Table = $1.Table
+		ast.Columns = columns
+		ast.Constraint = &constraint
+	}
+ddl_create_table_header
+	 :tokenCreate tokenTable ddl_tableName
+	 {
+		$$ = $3
+	 }
+	 |tokenCreate tokenTable tokenIF tokenNOT tokenEXISTS ddl_tableName
+	 {
+		$$ = $6
+	 }
 
 ddl_tableName
 	: ddl_symbol
 	{
-		yylex.(*lexer).ast.Table=$1
+		$$.Table = $1
 	}
 	| ddl_symbol tokenDot ddl_symbol
 	{
-		yylex.(*lexer).ast.Schema=$1
-		yylex.(*lexer).ast.Table=$3
+		$$.Schema = $1
+		$$.Table = $3
 	}
-	;
 
 ddl_create_table_body
-	: tokenLeftParen ddl_table_columns  ddl_table_column tokenRightParen tokenSemicolon
+	: ddl_table_column
 	{
-		ast := yylex.(*lexer).ast
-		ast.Columns = append($2,$3)
+		$$.columns = []columnObj{$1}
 	}
-	| tokenLeftParen ddl_table_columns   ddl_table_constraint tokenRightParen tokenSemicolon
+	| ddl_create_table_body tokenComma ddl_table_column
 	{
-		ast := yylex.(*lexer).ast
-		ast.Columns = $2
+		$$.columns = append($$.columns,$3)
 	}
-	 | tokenLeftParen ddl_table_column tokenRightParen tokenSemicolon
-	 {
-		ast := yylex.(*lexer).ast
-		ast.Columns  = []*TableColumn{
-			$2,
-		}
-	 }
-
-ddl_table_columns
-	: ddl_table_column tokenComma
+	| ddl_table_constraint
 	{
-		$$ = []*TableColumn{
-			$1,
-		}
+		$$.constraint = $1
 	}
-	| ddl_table_constraint tokenComma
+	| ddl_create_table_body tokenComma ddl_table_constraint
 	{
+		$$.constraint = combineConstraint($$.constraint,$3)
 	}
-	| ddl_table_columns ddl_table_column tokenComma
-	{
-		$$ = append($1,$2)
-	}
-	| ddl_table_columns ddl_table_constraint tokenComma
 
 ddl_table_column
 	: ddl_column_name ddl_data_type ddl_column_constraint
 	{
-	 $$ = &TableColumn{
-		Name: $1,
-		Type: $2,
-	 }
+	 $$ = $3
+	 $$.Name = $1
+	 $$.Type = $2
 	}
 
 ddl_column_name
@@ -112,13 +130,36 @@ ddl_data_type
 
 ddl_column_constraint
 	: tokenUNIQUE
-	| tokenString
+	{
+		$$.Unique = true
+	}
+	| ddl_column_primary_key
+	{
+		$$.PrimaryKey = true
+	}
 	| tokenNOT tokenNULL
+	{
+		$$.NotNull = true
+	}
 	| tokenDEFAULT ddl_default_expr
+	{
+	}
 	| ddl_column_constraint tokenUNIQUE
-	| ddl_column_constraint tokenString
+	{
+		$$.PrimaryKey = true
+	}
+	| ddl_column_constraint ddl_column_primary_key
+	{
+		$$.PrimaryKey = true
+	}
 	| ddl_column_constraint tokenNOT tokenNULL
+	{
+		$$.NotNull = true
+	}
 	| ddl_column_constraint tokenDEFAULT ddl_default_expr
+
+ddl_column_primary_key
+	: tokenPRIMARY tokenKEY{}
 
 ddl_default_expr
 	: ddl_value
@@ -127,10 +168,19 @@ ddl_default_expr
 
 ddl_table_constraint
 	: tokenUNIQUE tokenLeftParen ddl_column_names tokenRightParen
+	{
+		$$.Uniques = append($$.Uniques,$3)
+	}
 
 ddl_column_names
 	: ddl_column_name
+	{
+		$$= []string{$1}
+	}
 	| ddl_column_names tokenComma ddl_column_name
+	{
+		$$= append($1,$3)
+	}
 
 ddl_symbol
 	: tokenString
