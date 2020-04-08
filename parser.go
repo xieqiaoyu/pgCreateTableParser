@@ -75,82 +75,82 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser.y:240
+//line parser.y:197
 
 //line yacctab:1
 var yyExca = [...]int{
 	-1, 1,
 	1, -1,
 	-2, 0,
-	-1, 48,
-	10, 31,
-	14, 31,
-	-2, 33,
+	-1, 50,
+	10, 34,
+	14, 34,
+	-2, 36,
 }
 
 const yyPrivate = 57344
 
-const yyLast = 71
+const yyLast = 73
 
 var yyAct = [...]int{
 
-	13, 11, 45, 16, 50, 31, 42, 55, 18, 43,
-	40, 34, 22, 32, 14, 15, 33, 30, 34, 44,
-	10, 38, 9, 24, 5, 37, 39, 14, 15, 7,
-	12, 35, 25, 58, 47, 41, 51, 57, 17, 18,
-	26, 28, 54, 27, 47, 63, 56, 52, 53, 19,
-	20, 61, 48, 15, 49, 59, 62, 23, 60, 6,
-	14, 15, 3, 2, 1, 36, 46, 21, 8, 4,
-	29,
+	16, 14, 47, 19, 44, 33, 52, 45, 42, 36,
+	21, 17, 18, 34, 57, 25, 35, 32, 36, 13,
+	46, 12, 40, 17, 18, 27, 9, 15, 39, 41,
+	6, 60, 37, 28, 20, 59, 49, 43, 53, 54,
+	55, 21, 7, 30, 56, 29, 49, 65, 58, 22,
+	23, 63, 50, 18, 51, 3, 64, 61, 26, 8,
+	62, 17, 18, 10, 4, 2, 1, 38, 48, 24,
+	11, 5, 31,
 }
 var yyPact = [...]int{
 
-	8, -1000, -1000, -1000, 49, 12, 7, 20, 38, -1000,
-	-1000, 53, 47, -1000, -1000, -1000, -1000, 4, 18, 27,
-	7, -6, 17, 53, 1, 53, -1000, -1000, -1000, -13,
-	-1000, -1000, -2, 45, -21, 53, 36, -1000, 53, -1000,
-	-1000, -1000, -14, 45, -1000, -1000, -1000, 23, -1000, -1000,
-	-1000, -1000, -1000, 53, -1000, -1000, -1000, 53, 40, -1000,
-	46, -1000, 34, -1000,
+	14, -1000, 29, -1000, -1000, 49, 9, 14, 4, 16,
+	-1000, 38, -1000, -1000, 54, 48, -1000, -1000, -1000, -1000,
+	6, 19, -1000, 4, -6, 18, 54, 2, 54, -1000,
+	-1000, -15, -1000, -1000, -1, 45, -19, 54, 28, -1000,
+	54, -1000, -1000, -1000, -7, 45, -1000, -1000, -1000, 21,
+	-1000, -1000, -1000, -1000, -1000, 54, -1000, -1000, -1000, 54,
+	40, -1000, 46, -1000, 36, -1000,
 }
 var yyPgo = [...]int{
 
-	0, 22, 70, 69, 3, 68, 20, 0, 1, 67,
-	66, 65, 5, 64, 63, 62, 2,
+	0, 21, 72, 71, 3, 70, 19, 0, 1, 69,
+	68, 67, 5, 66, 65, 55, 64, 2,
 }
 var yyR1 = [...]int{
 
-	0, 13, 14, 15, 3, 3, 4, 4, 5, 5,
-	5, 5, 1, 8, 9, 9, 2, 2, 2, 2,
-	2, 2, 2, 2, 12, 16, 16, 16, 6, 11,
-	11, 7, 7, 10, 10,
+	0, 13, 14, 14, 15, 15, 16, 3, 3, 4,
+	4, 5, 5, 5, 5, 1, 8, 9, 9, 2,
+	2, 2, 2, 2, 2, 2, 2, 12, 17, 17,
+	17, 6, 11, 11, 7, 7, 10, 10,
 }
 var yyR2 = [...]int{
 
-	0, 1, 1, 5, 3, 6, 1, 3, 1, 3,
-	1, 3, 3, 1, 1, 3, 1, 1, 2, 2,
-	2, 2, 3, 3, 2, 1, 5, 3, 4, 1,
-	3, 1, 1, 1, 1,
+	0, 1, 3, 1, 1, 0, 4, 3, 6, 1,
+	3, 1, 3, 1, 3, 3, 1, 1, 3, 1,
+	1, 2, 2, 2, 2, 3, 3, 2, 1, 5,
+	3, 4, 1, 3, 1, 1, 1, 1,
 }
 var yyChk = [...]int{
 
-	-1000, -13, -14, -15, -3, 16, 10, 17, -5, -1,
-	-6, -8, 23, -7, 7, 8, -4, 18, -7, 11,
-	12, -9, -7, 10, 19, 14, 13, -1, -6, -2,
-	23, -12, 19, 22, 24, 14, -11, -8, 20, -7,
-	23, -12, 19, 22, 21, -16, -10, -7, 7, 9,
-	25, -7, 11, 12, -4, 21, -16, 14, 10, -8,
-	-7, 11, 10, 11,
+	-1000, -13, -14, -15, -16, -3, 16, 13, 10, 17,
+	-15, -5, -1, -6, -8, 23, -7, 7, 8, -4,
+	18, -7, 11, 12, -9, -7, 10, 19, 14, -1,
+	-6, -2, 23, -12, 19, 22, 24, 14, -11, -8,
+	20, -7, 23, -12, 19, 22, 21, -17, -10, -7,
+	7, 9, 25, -7, 11, 12, -4, 21, -17, 14,
+	10, -8, -7, 11, 10, 11,
 }
 var yyDef = [...]int{
 
-	0, -2, 1, 2, 0, 0, 0, 0, 0, 8,
-	10, 0, 0, 13, 31, 32, 4, 0, 6, 0,
-	0, 0, 14, 0, 0, 0, 3, 9, 11, 12,
-	16, 17, 0, 0, 0, 0, 0, 29, 0, 7,
-	20, 21, 0, 0, 18, 19, 25, 0, -2, 34,
-	24, 15, 28, 0, 5, 22, 23, 0, 0, 30,
-	0, 27, 0, 26,
+	5, -2, 1, 3, 4, 0, 0, 5, 0, 0,
+	2, 0, 11, 13, 0, 0, 16, 34, 35, 7,
+	0, 9, 6, 0, 0, 17, 0, 0, 0, 12,
+	14, 15, 19, 20, 0, 0, 0, 0, 0, 32,
+	0, 10, 23, 24, 0, 0, 21, 22, 28, 0,
+	-2, 37, 27, 18, 31, 0, 8, 25, 26, 0,
+	0, 33, 0, 30, 0, 29,
 }
 var yyTok1 = [...]int{
 
@@ -503,9 +503,9 @@ yydefault:
 	// dummy call; replaced with literal code
 	switch yynt {
 
-	case 3:
-		yyDollar = yyS[yypt-5 : yypt+1]
-//line parser.y:57
+	case 6:
+		yyDollar = yyS[yypt-4 : yypt+1]
+//line parser.y:61
 		{
 			columns := []*TableColumn{}
 			constraint := yyDollar[3].t_body.constraint
@@ -519,135 +519,137 @@ yydefault:
 				}
 			}
 			ast := yylex.(*lexer).ast
-			ast.Schema = yyDollar[1].t_header.Schema
-			ast.Table = yyDollar[1].t_header.Table
-			ast.Columns = columns
-			ast.Constraint = &constraint
-		}
-	case 4:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:77
-		{
-			yyVAL.t_header = yyDollar[3].t_header
-		}
-	case 5:
-		yyDollar = yyS[yypt-6 : yypt+1]
-//line parser.y:81
-		{
-			yyVAL.t_header = yyDollar[6].t_header
-		}
-	case 6:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:87
-		{
-			yyVAL.t_header.Table = yyDollar[1].stringVal
+			yylex.(*lexer).ast = append(ast, &TableDefine{
+				Schema:     yyDollar[1].t_header.Schema,
+				Table:      yyDollar[1].t_header.Table,
+				Columns:    columns,
+				Constraint: &constraint,
+			})
 		}
 	case 7:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:91
+//line parser.y:83
+		{
+			yyVAL.t_header = yyDollar[3].t_header
+		}
+	case 8:
+		yyDollar = yyS[yypt-6 : yypt+1]
+//line parser.y:87
+		{
+			yyVAL.t_header = yyDollar[6].t_header
+		}
+	case 9:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:93
+		{
+			yyVAL.t_header.Table = yyDollar[1].stringVal
+		}
+	case 10:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:97
 		{
 			yyVAL.t_header.Schema = yyDollar[1].stringVal
 			yyVAL.t_header.Table = yyDollar[3].stringVal
 		}
-	case 8:
+	case 11:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:98
+//line parser.y:104
 		{
 			yyVAL.t_body.columns = []columnObj{yyDollar[1].column}
 		}
-	case 9:
+	case 12:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:102
+//line parser.y:108
 		{
 			yyVAL.t_body.columns = append(yyVAL.t_body.columns, yyDollar[3].column)
 		}
-	case 10:
+	case 13:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:106
+//line parser.y:112
 		{
 			yyVAL.t_body.constraint = yyDollar[1].t_constraint
 		}
-	case 11:
+	case 14:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:110
+//line parser.y:116
 		{
 			yyVAL.t_body.constraint = combineConstraint(yyVAL.t_body.constraint, yyDollar[3].t_constraint)
 		}
-	case 12:
+	case 15:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:165
+//line parser.y:122
 		{
 			yyVAL.column = yyDollar[3].column
 			yyVAL.column.Name = yyDollar[1].stringVal
 			yyVAL.column.Type = yyDollar[2].stringVal
 		}
-	case 15:
+	case 18:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:176
+//line parser.y:133
 		{
 			yyVAL.stringVal = __yyfmt__.Sprintf("%s.%s", yyDollar[1].stringVal, yyDollar[3].stringVal)
 		}
-	case 16:
+	case 19:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:182
+//line parser.y:139
 		{
 			yyVAL.column.Unique = true
 		}
-	case 17:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:186
-		{
-			yyVAL.column.PrimaryKey = true
-		}
-	case 18:
-		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:190
-		{
-			yyVAL.column.NotNull = true
-		}
-	case 19:
-		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:194
-		{
-		}
 	case 20:
-		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:197
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.y:143
 		{
 			yyVAL.column.PrimaryKey = true
 		}
 	case 21:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:201
-		{
-			yyVAL.column.PrimaryKey = true
-		}
-	case 22:
-		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:205
+//line parser.y:147
 		{
 			yyVAL.column.NotNull = true
 		}
-	case 24:
+	case 22:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:211
+//line parser.y:151
 		{
 		}
-	case 28:
+	case 23:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:154
+		{
+			yyVAL.column.PrimaryKey = true
+		}
+	case 24:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:158
+		{
+			yyVAL.column.PrimaryKey = true
+		}
+	case 25:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.y:162
+		{
+			yyVAL.column.NotNull = true
+		}
+	case 27:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:168
+		{
+		}
+	case 31:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line parser.y:220
+//line parser.y:177
 		{
 			yyVAL.t_constraint.Uniques = append(yyVAL.t_constraint.Uniques, yyDollar[3].stringsVal)
 		}
-	case 29:
+	case 32:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:226
+//line parser.y:183
 		{
 			yyVAL.stringsVal = []string{yyDollar[1].stringVal}
 		}
-	case 30:
+	case 33:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:230
+//line parser.y:187
 		{
 			yyVAL.stringsVal = append(yyDollar[1].stringsVal, yyDollar[3].stringVal)
 		}

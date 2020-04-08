@@ -11,6 +11,7 @@ type parseTest struct {
 	assertDefine *TableDefine
 }
 
+//FIXME: need to compare nullable primary key and uniques
 func defineEqual(d1, d2 *TableDefine) (bool, error) {
 	if d1.Schema != d2.Schema {
 		return false, fmt.Errorf("schema name is not equal")
@@ -88,11 +89,16 @@ func TestParser(t *testing.T) {
 	yyDebug = 0
 	yyErrorVerbose = true
 	for _, test := range parserTests {
-		def, err := ParseTable(test.name, test.input)
+		defs, err := ParseTable(test.name, test.input)
 		if err != nil {
 			t.Errorf("parse %s err :%s", test.name, err)
 			continue
 		}
+		if len(defs) != 1 {
+			t.Errorf("Wrong parse define num ,get %d assume 1 ", len(defs))
+			continue
+		}
+		def := defs[0]
 		equal, err := defineEqual(def, test.assertDefine)
 		if !equal {
 			t.Errorf("parse %s err :%s, got\n\t%+v\nexpect\n\t%+v", test.name, err, Define2String(def), Define2String(test.assertDefine))

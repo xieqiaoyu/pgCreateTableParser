@@ -48,12 +48,16 @@ package tableParser
 %type <boolVal> ddl_column_primary_key
 
 %%
-ddl: ddl_create
+stmtblock: ddlmulti
 
-ddl_create: ddl_create_table
+ddlmulti: ddlmulti tokenSemicolon ddl
+		| ddl
+
+ddl: ddl_create_table
+   | /* Empty */
 
 ddl_create_table
-	: ddl_create_table_header tokenLeftParen ddl_create_table_body tokenRightParen tokenSemicolon
+	: ddl_create_table_header tokenLeftParen ddl_create_table_body tokenRightParen
 	{
 		columns := []*TableColumn{}
 		constraint := $3.constraint
@@ -67,10 +71,12 @@ ddl_create_table
 			}
 		}
 		ast := yylex.(*lexer).ast
-		ast.Schema = $1.Schema
-		ast.Table = $1.Table
-		ast.Columns = columns
-		ast.Constraint = &constraint
+		yylex.(*lexer).ast = append(ast,&TableDefine{
+			Schema: $1.Schema,
+			Table: $1.Table,
+			Columns: columns,
+			Constraint: &constraint,
+		})
 	}
 ddl_create_table_header
 	 :tokenCreate tokenTable ddl_tableName

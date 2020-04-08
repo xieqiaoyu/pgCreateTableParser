@@ -58,7 +58,7 @@ type tableBody struct {
 	constraint TableConstraint
 }
 
-func ParseTable(name, sql string) (*TableDefine, error) {
+func ParseTable(name, sql string) ([]*TableDefine, error) {
 	yyErrorVerbose = true
 	l := lex(name, sql)
 	p := &yyParserImpl{}

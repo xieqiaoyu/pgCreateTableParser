@@ -64,12 +64,12 @@ type lexer struct {
 	start     Pos    // start position of this token
 	width     Pos    // width of last rune read from input
 	tokens    chan token
-	line      int          // line number of newlines
-	startLine int          // start line of this token
-	lerror    error        // last error
-	lwidth    Pos          // last pos rune width before eof
-	inEof     bool         // whether input is in eof status
-	ast       *TableDefine // the final result ast tree
+	line      int            // line number of newlines
+	startLine int            // start line of this token
+	lerror    error          // last error
+	lwidth    Pos            // last pos rune width before eof
+	inEof     bool           // whether input is in eof status
+	ast       []*TableDefine // the final result ast tree
 }
 
 func (l *lexer) next() rune {
@@ -256,7 +256,7 @@ func lex(name, input string) *lexer {
 		tokens:    make(chan token),
 		line:      1,
 		startLine: 1,
-		ast:       new(TableDefine),
+		ast:       []*TableDefine{},
 	}
 	go l.run()
 	return l
