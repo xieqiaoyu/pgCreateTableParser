@@ -2,7 +2,6 @@ package tableParser
 
 import (
 	"fmt"
-	"strings"
 	"testing"
 )
 
@@ -44,23 +43,6 @@ func makeDefine(schema, table string, columns [][]string) *TableDefine {
 		Table:   table,
 		Columns: cols,
 	}
-}
-func Define2String(def *TableDefine) string {
-	columns := "\n\t---------------+---------------"
-	for _, col := range def.Columns {
-		columns += fmt.Sprintf("\n\t%-15s|%-15s", col.Name, col.Type)
-	}
-	constraints := "\n\tConstraints:"
-	if len(def.Constraint.PrimaryKey) > 0 {
-		constraints += fmt.Sprintf("\n\t\tPK: %s", strings.Join(def.Constraint.PrimaryKey, ","))
-	}
-	if len(def.Constraint.Uniques) > 0 {
-		for _, unique := range def.Constraint.Uniques {
-			constraints += fmt.Sprintf("\n\t\tUnique: (%s)", strings.Join(unique, ","))
-		}
-	}
-
-	return fmt.Sprintf(" Table \"%s\".\"%s\" %s\n%s\n", def.Schema, def.Table, columns, constraints)
 }
 
 const (
