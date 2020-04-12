@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+//TableDefine define of a table
 type TableDefine struct {
 	Schema     string
 	Table      string
@@ -12,6 +13,7 @@ type TableDefine struct {
 	Constraint *TableConstraint
 }
 
+//TableColumn one column define in a table
 type TableColumn struct {
 	Name string
 	Type string
@@ -20,6 +22,7 @@ type TableColumn struct {
 	//Default  string
 }
 
+//TableConstraint constraint in table include constraint in column
 type TableConstraint struct {
 	PrimaryKey []string
 	Uniques    [][]string
@@ -58,6 +61,7 @@ type tableBody struct {
 	constraint TableConstraint
 }
 
+//ParseTable parse a giving create table statement,get a table define struct
 func ParseTable(name, sql string) ([]*TableDefine, error) {
 	yyErrorVerbose = true
 	l := lex(name, sql)
@@ -68,6 +72,7 @@ func ParseTable(name, sql string) ([]*TableDefine, error) {
 	return l.ast, nil
 }
 
+//Define2String transfer a table define to string ,most use for test
 func Define2String(def *TableDefine) string {
 	columns := "\n\t---------------+---------------"
 	for _, col := range def.Columns {
