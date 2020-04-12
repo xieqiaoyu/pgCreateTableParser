@@ -2,6 +2,7 @@ package tableParser
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -11,7 +12,6 @@ type parseTest struct {
 	assertDefine *TableDefine
 }
 
-//FIXME: need to compare nullable primary key and uniques
 func defineEqual(d1, d2 *TableDefine) (bool, error) {
 	if d1.Schema != d2.Schema {
 		return false, fmt.Errorf("schema name is not equal")
@@ -31,18 +31,29 @@ func defineEqual(d1, d2 *TableDefine) (bool, error) {
 
 		}
 	}
+	if d1.Constraint != nil {
+		if d2.Constraint == nil {
+			return false, fmt.Errorf("Constraint is not equal")
+		}
+		if !reflect.DeepEqual(d1.Constraint.PrimaryKey, d2.Constraint.PrimaryKey) {
+			return false, fmt.Errorf("Primary key is not equal")
+		}
+	} else if d2.Constraint != nil {
+		return false, fmt.Errorf("Constraint is not equal")
+	}
 	return true, nil
 }
 
-func makeDefine(schema, table string, columns [][]string) *TableDefine {
+func makeDefine(schema, table string, columns [][]string, constraint *TableConstraint) *TableDefine {
 	cols := []*TableColumn{}
 	for _, column := range columns {
 		cols = append(cols, &TableColumn{column[0], column[1], false}) // nullable false
 	}
 	return &TableDefine{
-		Schema:  schema,
-		Table:   table,
-		Columns: cols,
+		Schema:     schema,
+		Table:      table,
+		Columns:    cols,
+		Constraint: constraint,
 	}
 }
 
@@ -75,6 +86,9 @@ var parserTests = []parseTest{
 		{"name", "TEXT"},
 		{"created_at", "TIMESTAMPTZ"},
 		{"info", "JSONB"},
+	}, &TableConstraint{
+		PrimaryKey: []string{"id"},
+		Uniques:    [][]string{[]string{"uuid"}},
 	}),
 	},
 	{"constant", constantCreate, makeDefine("admin", "users2", [][]string{
@@ -83,13 +97,16 @@ var parserTests = []parseTest{
 		{"type", "admin.user_type"},
 		{"trait", "TEXT"},
 		{"extra", "JSONB"},
+	}, &TableConstraint{
+		PrimaryKey: []string{"id"},
+		Uniques:    [][]string{[]string{"type", "trait"}},
 	}),
 	},
 	{
 		"noconstantCreate", noconstantCreate, makeDefine("", "noconstant", [][]string{
 			{"id", "SERIAL"},
 			{"type", "TEXT"},
-		}),
+		}, &TableConstraint{}),
 	},
 }
 

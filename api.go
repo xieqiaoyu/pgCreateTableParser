@@ -74,12 +74,14 @@ func Define2String(def *TableDefine) string {
 		columns += fmt.Sprintf("\n\t%-15s|%-15s", col.Name, col.Type)
 	}
 	constraints := "\n\tConstraints:"
-	if len(def.Constraint.PrimaryKey) > 0 {
-		constraints += fmt.Sprintf("\n\t\tPK: %s", strings.Join(def.Constraint.PrimaryKey, ","))
-	}
-	if len(def.Constraint.Uniques) > 0 {
-		for _, unique := range def.Constraint.Uniques {
-			constraints += fmt.Sprintf("\n\t\tUnique: (%s)", strings.Join(unique, ","))
+	if def.Constraint != nil {
+		if len(def.Constraint.PrimaryKey) > 0 {
+			constraints += fmt.Sprintf("\n\t\tPK: %s", strings.Join(def.Constraint.PrimaryKey, ","))
+		}
+		if len(def.Constraint.Uniques) > 0 {
+			for _, unique := range def.Constraint.Uniques {
+				constraints += fmt.Sprintf("\n\t\tUnique: (%s)", strings.Join(unique, ","))
+			}
 		}
 	}
 
