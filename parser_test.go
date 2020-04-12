@@ -62,6 +62,10 @@ const (
     "extra" JSONB NOT NULL DEFAULT '{}',
     UNIQUE ("type","trait")
 );`
+	noconstantCreate = `CREATE TABLE noconstant (
+    "id" SERIAL,
+	"type" TEXT)
+`
 )
 
 var parserTests = []parseTest{
@@ -71,8 +75,7 @@ var parserTests = []parseTest{
 		{"name", "TEXT"},
 		{"created_at", "TIMESTAMPTZ"},
 		{"info", "JSONB"},
-	},
-	),
+	}),
 	},
 	{"constant", constantCreate, makeDefine("admin", "users2", [][]string{
 		{"id", "SERIAL"},
@@ -80,8 +83,13 @@ var parserTests = []parseTest{
 		{"type", "admin.user_type"},
 		{"trait", "TEXT"},
 		{"extra", "JSONB"},
+	}),
 	},
-	),
+	{
+		"noconstantCreate", noconstantCreate, makeDefine("", "noconstant", [][]string{
+			{"id", "SERIAL"},
+			{"type", "TEXT"},
+		}),
 	},
 }
 

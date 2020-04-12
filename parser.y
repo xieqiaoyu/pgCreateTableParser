@@ -124,6 +124,11 @@ ddl_table_column
 	 $$.Name = $1
 	 $$.Type = $2
 	}
+	| ddl_column_name ddl_data_type
+	{
+	  $$.Name = $1
+	  $$.Type = $2
+	}
 
 ddl_column_name
 	: ddl_symbol

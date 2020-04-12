@@ -75,7 +75,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser.y:197
+//line parser.y:202
 
 //line yacctab:1
 var yyExca = [...]int{
@@ -83,9 +83,9 @@ var yyExca = [...]int{
 	1, -1,
 	-2, 0,
 	-1, 50,
-	10, 34,
-	14, 34,
-	-2, 36,
+	10, 35,
+	14, 35,
+	-2, 37,
 }
 
 const yyPrivate = 57344
@@ -121,16 +121,16 @@ var yyPgo = [...]int{
 var yyR1 = [...]int{
 
 	0, 13, 14, 14, 15, 15, 16, 3, 3, 4,
-	4, 5, 5, 5, 5, 1, 8, 9, 9, 2,
-	2, 2, 2, 2, 2, 2, 2, 12, 17, 17,
-	17, 6, 11, 11, 7, 7, 10, 10,
+	4, 5, 5, 5, 5, 1, 1, 8, 9, 9,
+	2, 2, 2, 2, 2, 2, 2, 2, 12, 17,
+	17, 17, 6, 11, 11, 7, 7, 10, 10,
 }
 var yyR2 = [...]int{
 
 	0, 1, 3, 1, 1, 0, 4, 3, 6, 1,
-	3, 1, 3, 1, 3, 3, 1, 1, 3, 1,
-	1, 2, 2, 2, 2, 3, 3, 2, 1, 5,
-	3, 4, 1, 3, 1, 1, 1, 1,
+	3, 1, 3, 1, 3, 3, 2, 1, 1, 3,
+	1, 1, 2, 2, 2, 2, 3, 3, 2, 1,
+	5, 3, 4, 1, 3, 1, 1, 1, 1,
 }
 var yyChk = [...]int{
 
@@ -145,12 +145,12 @@ var yyChk = [...]int{
 var yyDef = [...]int{
 
 	5, -2, 1, 3, 4, 0, 0, 5, 0, 0,
-	2, 0, 11, 13, 0, 0, 16, 34, 35, 7,
-	0, 9, 6, 0, 0, 17, 0, 0, 0, 12,
-	14, 15, 19, 20, 0, 0, 0, 0, 0, 32,
-	0, 10, 23, 24, 0, 0, 21, 22, 28, 0,
-	-2, 37, 27, 18, 31, 0, 8, 25, 26, 0,
-	0, 33, 0, 30, 0, 29,
+	2, 0, 11, 13, 0, 0, 17, 35, 36, 7,
+	0, 9, 6, 0, 16, 18, 0, 0, 0, 12,
+	14, 15, 20, 21, 0, 0, 0, 0, 0, 33,
+	0, 10, 24, 25, 0, 0, 22, 23, 29, 0,
+	-2, 38, 28, 19, 32, 0, 8, 26, 27, 0,
+	0, 34, 0, 31, 0, 30,
 }
 var yyTok1 = [...]int{
 
@@ -583,73 +583,80 @@ yydefault:
 			yyVAL.column.Name = yyDollar[1].stringVal
 			yyVAL.column.Type = yyDollar[2].stringVal
 		}
-	case 18:
+	case 16:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:128
+		{
+			yyVAL.column.Name = yyDollar[1].stringVal
+			yyVAL.column.Type = yyDollar[2].stringVal
+		}
+	case 19:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:133
+//line parser.y:138
 		{
 			yyVAL.stringVal = __yyfmt__.Sprintf("%s.%s", yyDollar[1].stringVal, yyDollar[3].stringVal)
 		}
-	case 19:
+	case 20:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:139
+//line parser.y:144
 		{
 			yyVAL.column.Unique = true
 		}
-	case 20:
+	case 21:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:143
+//line parser.y:148
 		{
 			yyVAL.column.PrimaryKey = true
-		}
-	case 21:
-		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:147
-		{
-			yyVAL.column.NotNull = true
 		}
 	case 22:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:151
+//line parser.y:152
 		{
+			yyVAL.column.NotNull = true
 		}
 	case 23:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:154
+//line parser.y:156
 		{
-			yyVAL.column.PrimaryKey = true
 		}
 	case 24:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:158
+//line parser.y:159
 		{
 			yyVAL.column.PrimaryKey = true
 		}
 	case 25:
+		yyDollar = yyS[yypt-2 : yypt+1]
+//line parser.y:163
+		{
+			yyVAL.column.PrimaryKey = true
+		}
+	case 26:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:162
+//line parser.y:167
 		{
 			yyVAL.column.NotNull = true
 		}
-	case 27:
+	case 28:
 		yyDollar = yyS[yypt-2 : yypt+1]
-//line parser.y:168
+//line parser.y:173
 		{
 		}
-	case 31:
+	case 32:
 		yyDollar = yyS[yypt-4 : yypt+1]
-//line parser.y:177
+//line parser.y:182
 		{
 			yyVAL.t_constraint.Uniques = append(yyVAL.t_constraint.Uniques, yyDollar[3].stringsVal)
 		}
-	case 32:
+	case 33:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.y:183
+//line parser.y:188
 		{
 			yyVAL.stringsVal = []string{yyDollar[1].stringVal}
 		}
-	case 33:
+	case 34:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.y:187
+//line parser.y:192
 		{
 			yyVAL.stringsVal = append(yyDollar[1].stringsVal, yyDollar[3].stringVal)
 		}
