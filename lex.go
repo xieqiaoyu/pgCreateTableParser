@@ -8,6 +8,8 @@ import (
 
 type Pos int
 
+const eof = -1
+
 type token struct {
 	typ  tokenType // the type of this token
 	pos  Pos       // the starting position, in bytes, of this token in the input string
@@ -52,41 +54,50 @@ var keywords = map[string]tokenType{
 	"key":     tokenKEY,
 }
 
-const eof = -1
-
 // stateFn represents the state of the scanner as a function that returns the next state.
 type stateFn func(*lexer) stateFn
 
 type lexer struct {
-	name      string
-	input     string // the string being scanned
-	pos       Pos    //current position in the input
-	start     Pos    // start position of this token
-	width     Pos    // width of last rune read from input
-	tokens    chan token
+	name       string
+	input      string // the string being scanned
+	pos        Pos    //current position in the input
+	start      Pos    // start position of this token
+	widthStack []Pos  //width of former runes in stack
+	widthSp    int    // current stack point of width stack
+	tokens     chan token
+
 	line      int            // line number of newlines
-	startLine int            // start line of this token
+	startLine int            // line of the start Pos
 	lerror    error          // last error
-	lwidth    Pos            // last pos rune width before eof
-	inEof     bool           // whether input is in eof status
 	ast       []*TableDefine // the final result ast tree
 }
 
 func (l *lexer) next() rune {
+	l.widthSp++
 	if int(l.pos) >= len(l.input) {
-		l.pos = Pos(len(l.input))
-		l.lwidth = l.width
-		l.width = 0
-		l.inEof = true
+		l.widthStack = append(l.widthStack[:l.widthSp], 0)
 		return eof
 	}
 	r, w := utf8.DecodeRuneInString(l.input[l.pos:])
-	l.width = Pos(w)
-	l.pos += l.width
+	runeWidth := Pos(w)
+	l.widthStack = append(l.widthStack[:l.widthSp], runeWidth)
+	l.pos += runeWidth
 	if r == '\n' {
 		l.line++
 	}
 	return r
+}
+
+func (l *lexer) backup() {
+	var lastRuneWitdh Pos
+	if l.widthSp >= 0 {
+		lastRuneWitdh = l.widthStack[l.widthSp]
+		l.widthSp--
+	}
+	l.pos -= lastRuneWitdh
+	if lastRuneWitdh == 1 && l.input[l.pos] == '\n' {
+		l.line--
+	}
 }
 
 func (l *lexer) peek() rune {
@@ -95,22 +106,10 @@ func (l *lexer) peek() rune {
 	return r
 }
 
-func (l *lexer) backup() {
-	if l.inEof {
-		l.pos = Pos(len(l.input))
-		l.width = l.lwidth
-		l.inEof = false
-	} else {
-		l.pos -= l.width
-		if l.width == 1 && l.input[l.pos] == '\n' {
-			l.line--
-		}
-	}
-}
-
 // emit passes an item back to the client.
 func (l *lexer) emit(t tokenType) {
 	new_t := token{t, l.start, l.input[l.start:l.pos], l.startLine}
+	// TODO: use cache to solve the problem
 	switch t {
 	case tokenPgSymbol:
 		new_t.val = strings.ReplaceAll(new_t.val, "\"\"", "\"")
@@ -118,15 +117,20 @@ func (l *lexer) emit(t tokenType) {
 		new_t.val = strings.ReplaceAll(new_t.val, "''", "'")
 	}
 	l.tokens <- new_t
-	l.start = l.pos
-	l.startLine = l.line
+	l.goOnNext()
+
 }
 
 // ignore skips over the pending input before this point.
 func (l *lexer) ignore() {
-	//l.line += strings.Count(l.input[l.start:l.pos], "\n")
+	l.goOnNext()
+}
+
+func (l *lexer) goOnNext() {
 	l.start = l.pos
 	l.startLine = l.line
+	l.widthSp = -1
+	l.widthStack = l.widthStack[:0]
 }
 
 // accept consumes the next rune if it's from the valid set.
@@ -254,6 +258,7 @@ func lex(name, input string) *lexer {
 		name:      name,
 		input:     input,
 		tokens:    make(chan token),
+		widthSp:   -1,
 		line:      1,
 		startLine: 1,
 		ast:       []*TableDefine{},
@@ -300,6 +305,7 @@ func lexIdentifier(l *lexer) stateFn {
 	}
 	return lexText
 }
+
 func lexPgSymbol(l *lexer) stateFn {
 	for {
 		for {
@@ -307,19 +313,13 @@ func lexPgSymbol(l *lexer) stateFn {
 			if r == '"' {
 				break
 			} else if r == eof {
-				l.emit(tokenPgSymbol)
+				l.emit(tokenEOF)
 				return nil
 			}
 		}
-		// is end or escape?
+		// is escape?
 		r := l.next()
-		if r == eof {
-			l.backup()
-			l.backup()
-			l.emit(tokenPgSymbol)
-			l.emit(tokenEOF)
-			return nil
-		} else if r != '"' {
+		if r != '"' {
 			l.backup()
 			l.backup()
 			l.emit(tokenPgSymbol)
@@ -342,15 +342,9 @@ func lexPgValue(l *lexer) stateFn {
 				return nil
 			}
 		}
-		// is end or escape?
+		// is  escape?
 		r := l.next()
-		if r == eof {
-			l.backup()
-			l.backup()
-			l.emit(tokenPgValue)
-			l.emit(tokenEOF)
-			return nil
-		} else if r != '\'' {
+		if r != '\'' {
 			l.backup()
 			l.backup()
 			l.emit(tokenPgValue)
