@@ -59,6 +59,12 @@ var lexTests = []lexTest{
 		mkToken(tokenSemicolon, ";"),
 		vEOF,
 	}},
+	{
+		"scan number", "123", []token{
+			mkToken(tokenNumber, "123"),
+			vEOF,
+		},
+	},
 }
 
 func collect(t *lexTest) (tokens []token) {

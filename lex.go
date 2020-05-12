@@ -3,6 +3,7 @@ package tableParser
 import (
 	"fmt"
 	"strings"
+	"unicode"
 	"unicode/utf8"
 )
 
@@ -212,6 +213,43 @@ func (l *lexer) scanWord() {
 	}
 }
 
+func (l *lexer) scanNumber() bool {
+	// Optional leading sign.
+	l.accept("+-")
+	digits := "0123456789_"
+	if l.accept("0") {
+		// Note: Leading 0 does not mean octal in floats.
+		if l.accept("xX") {
+			digits = "0123456789abcdefABCDEF_"
+		} else if l.accept("oO") {
+			digits = "01234567_"
+		} else if l.accept("bB") {
+			digits = "01_"
+		}
+	}
+	l.acceptRun(digits)
+	if l.accept(".") {
+		l.acceptRun(digits)
+	}
+	if len(digits) == 10+1 && l.accept("eE") {
+		l.accept("+-")
+		l.acceptRun("0123456789_")
+	}
+	if len(digits) == 16+6+1 && l.accept("pP") {
+		l.accept("+-")
+		l.acceptRun("0123456789_")
+	}
+	// Is it imaginary?
+	l.accept("i")
+	// Next thing mustn't be alphanumeric.
+	if isAlphaNumeric(l.peek()) {
+		l.next()
+		return false
+	}
+	return true
+
+}
+
 func (l *lexer) skipBlank() {
 	var r rune
 	for {
@@ -288,6 +326,8 @@ func lexText(l *lexer) stateFn {
 			case isLetter(r):
 				l.backup()
 				return lexIdentifier
+			case isDigit(r):
+				return lexDigit
 			default:
 				l.emit(tokenUnknown)
 			}
@@ -303,6 +343,14 @@ func lexIdentifier(l *lexer) stateFn {
 	} else {
 		l.emit(tokenString)
 	}
+	return lexText
+}
+
+func lexDigit(l *lexer) stateFn {
+	if !l.scanNumber() {
+		return l.errorf("bad number syntax: %q", l.input[l.start:l.pos])
+	}
+	l.emit(tokenNumber)
 	return lexText
 }
 
@@ -370,4 +418,9 @@ func isDigit(r rune) bool {
 }
 func isEndOfLine(r rune) bool {
 	return r == '\r' || r == '\n'
+}
+
+// isAlphaNumeric reports whether r is an alphabetic, digit, or underscore.
+func isAlphaNumeric(r rune) bool {
+	return r == '_' || unicode.IsLetter(r) || unicode.IsDigit(r)
 }

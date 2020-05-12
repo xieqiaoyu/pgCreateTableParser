@@ -77,6 +77,11 @@ const (
     "id" SERIAL,
 	"type" TEXT)
 `
+	numberDefaultCreate = ` CREATE TABLE numberDefault (
+    "id"  SERIAL,
+	"age" INTEGER NOT NULL DEFAULT 0
+);
+`
 )
 
 var parserTests = []parseTest{
@@ -106,6 +111,12 @@ var parserTests = []parseTest{
 		"noconstantCreate", noconstantCreate, makeDefine("", "noconstant", [][]string{
 			{"id", "SERIAL"},
 			{"type", "TEXT"},
+		}, &TableConstraint{}),
+	},
+	{
+		"defaultNumberCreate", numberDefaultCreate, makeDefine("", "numberDefault", [][]string{
+			{"id", "SERIAL"},
+			{"age", "INTEGER"},
 		}, &TableConstraint{}),
 	},
 }

@@ -17,6 +17,7 @@ package tableParser
        tokenEOF
        tokenUnknown
        tokenString
+       tokenNumber
        tokenPgSymbol
        tokenPgValue
        tokenLeftParen
@@ -199,4 +200,5 @@ ddl_symbol
 ddl_value
 	: tokenString
 	| tokenPgValue
+	| tokenNumber
 %%
